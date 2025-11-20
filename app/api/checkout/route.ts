@@ -4,12 +4,9 @@ import Stripe from "stripe";
 import { getSupabaseUser } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabaseClient";
 
-const STRIPE_API_VERSION = "2024-09-30" as const;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
-const stripe = STRIPE_SECRET_KEY
-  ? new Stripe(STRIPE_SECRET_KEY, { apiVersion: STRIPE_API_VERSION })
-  : null;
+const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
 
 export async function POST(request: Request) {
   try {

@@ -199,10 +199,12 @@ export async function POST(request: Request) {
       }
     }
 
+    const premiumPayload =
+      payload.premium_data && typeof payload.premium_data === "object"
+        ? (payload.premium_data as Record<string, unknown>)
+        : null;
     const hasPremiumData =
-      !!payload.premium_data &&
-      typeof payload.premium_data === "object" &&
-      Object.keys(payload.premium_data).length > 0;
+      premiumPayload !== null && Object.keys(premiumPayload).length > 0;
 
     const responseBody: KreitScoreResponse = {
       kreit_score: payload.kreit_score ?? 0,
@@ -213,7 +215,7 @@ export async function POST(request: Request) {
         payload.pro_summary ??
         "We could not generate a professional summary for this property.",
       has_premium_data: hasPremiumData,
-      premium_data: premium && hasPremiumData ? payload.premium_data : null,
+      premium_data: premium && hasPremiumData ? premiumPayload : null,
     };
 
     return NextResponse.json(responseBody);

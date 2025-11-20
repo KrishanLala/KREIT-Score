@@ -1,7 +1,10 @@
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
-import { createSupabaseServerClient } from "./supabaseClient";
+import {
+  createSupabaseServerClient,
+  type SupabaseServerClient,
+} from "./supabaseClient";
 
 const COOKIE_ACCESS_TOKEN_KEYS = [
   "sb-access-token",
@@ -49,7 +52,7 @@ export const extractSupabaseAccessToken = (request: Request) => {
 
 export const getSupabaseUser = async (
   request: Request,
-  supabase?: SupabaseClient,
+  supabase?: SupabaseServerClient,
 ) => {
   const client = supabase ?? createSupabaseServerClient();
   const token = extractSupabaseAccessToken(request);
@@ -67,7 +70,7 @@ export const getSupabaseUser = async (
 };
 
 export const isUserPremium = async (
-  supabase: SupabaseClient,
+  supabase: SupabaseServerClient,
   user: User | null,
 ) => {
   if (!user) return false;
